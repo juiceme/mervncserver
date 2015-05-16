@@ -625,8 +625,7 @@ rfbNewClientAction ScreenToVnc::newclient(rfbClientPtr cl)
 
     bool allowConnection = false;
 
-    // TODO: make that configurable, wlan device interface is not always wlan0!
-    QNetworkInterface wlanIf = QNetworkInterface::interfaceFromName("wlan0");
+    QNetworkInterface loIf = QNetworkInterface::interfaceFromName("lo");
 
     QHostAddress remoteAddr = QHostAddress(QString::fromLatin1(cl->host));
 
@@ -639,7 +638,7 @@ rfbNewClientAction ScreenToVnc::newclient(rfbClientPtr cl)
         remoteAddr = QHostAddress(remoteAddrIPv4);
     }
 
-    foreach (QNetworkAddressEntry entry, wlanIf.addressEntries()){
+    foreach (QNetworkAddressEntry entry, loIf.addressEntries()){
         if (remoteAddr.protocol() == entry.ip().protocol()
             && remoteAddr.isInSubnet(entry.ip(), entry.prefixLength())){
             allowConnection = true;
